@@ -1,1 +1,1 @@
-# Hello Mobile-Programming course!
+# Welcome to the Mobile Programming course repository!
