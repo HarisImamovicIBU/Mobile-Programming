@@ -18,7 +18,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BrainScriptTheme {
-                LoginScreen()
+                RegistrationScreen()
+                //LoginScreen()
             }
         }
     }
