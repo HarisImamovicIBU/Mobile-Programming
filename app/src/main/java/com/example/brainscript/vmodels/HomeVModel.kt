@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 
 class HomeVModel : ViewModel(){
-    private val menuItems = MutableStateFlow(listOf("Start Quiz", "View Questions", "Profile"))
+    private val menuItems = MutableStateFlow(listOf("Start Quiz", "View Questions", "Profile", "Contact Us"))
     val items: StateFlow<List<String>> = menuItems
 }
