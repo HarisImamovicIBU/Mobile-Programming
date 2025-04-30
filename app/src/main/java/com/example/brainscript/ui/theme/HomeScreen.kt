@@ -1,5 +1,7 @@
 package com.example.brainscript.ui.theme
 
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -17,8 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import com.example.brainscript.vmodels.HomeVModel
+import androidx.compose.ui.platform.LocalContext
+
 @Composable
 fun HomeScreen(viewModel: HomeVModel) {
+    val context = LocalContext.current
     val menuItems = viewModel.items.collectAsState(initial = emptyList())
     Box(
         modifier = Modifier
@@ -46,7 +51,21 @@ fun HomeScreen(viewModel: HomeVModel) {
             )
             menuItems.value.forEach{ item ->
                 Button(
-                    onClick = { },
+                    onClick = {
+                        if (item=="Contact Us"){
+                            val intent = Intent(Intent.ACTION_SEND).apply{
+                                type = "message/rfc882"
+                                putExtra(Intent.EXTRA_EMAIL, arrayOf("haris.imamovic@stu.ibu.edu.ba"))
+                                putExtra(Intent.EXTRA_SUBJECT, "Contacting BrainScript Team")
+                                setPackage("com.google.android.gm")
+                            }
+                            try{
+                                context.startActivity(intent)
+                            }catch(e: Exception){
+                                Toast.makeText(context, "Cannot find the Gmail app", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                    },
                     modifier = Modifier.fillMaxWidth()
                         .height(50.dp)
                         .padding(bottom = 10.dp),

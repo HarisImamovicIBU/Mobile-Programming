@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             BrainScriptTheme {
                 //RegistrationScreen()
                 //LoginScreen()
-                HomeScreen(viewModel)
+                //HomeScreen(viewModel)
             }
         }
     }
