@@ -11,4 +11,7 @@ interface CategoryDao : BaseDao<Category> {
 
     @Query("SELECT * FROM categories WHERE id = :id")
     suspend fun getCategoryById(id: Int): Category?
+
+    @Query("SELECT * FROM categories WHERE categoryName = :categoryName")
+    suspend fun getCategoryByName(categoryName: String): Category?
 }
