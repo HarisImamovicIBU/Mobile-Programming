@@ -20,9 +20,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import com.example.brainscript.vmodels.HomeVModel
 import androidx.compose.ui.platform.LocalContext
+import com.example.brainscript.model.User
+import com.example.brainscript.vmodels.CategoryViewModel
 
 @Composable
-fun HomeScreen(viewModel: HomeVModel) {
+fun HomeScreen(loggedUser: User, viewModel: HomeVModel) {
     val context = LocalContext.current
     val menuItems = viewModel.items.collectAsState(initial = emptyList())
     Box(

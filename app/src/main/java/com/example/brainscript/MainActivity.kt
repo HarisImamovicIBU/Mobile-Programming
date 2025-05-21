@@ -1,4 +1,4 @@
-package com.example.brainscript.ui.theme
+package com.example.brainscript
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,15 +12,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.brainscript.ui.theme.BrainScriptTheme
-import com.example.brainscript.vmodels.HomeVModel
+import com.example.brainscript.ui.theme.navigation.AppNavHost
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel by viewModels<HomeVModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             BrainScriptTheme {
+                AppNavHost()
                 //RegistrationScreen()
                 //LoginScreen()
                 //HomeScreen(viewModel)
