@@ -31,9 +31,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.brainscript.R
-
+import com.example.brainscript.vmodels.UserViewModel
 @Composable
-fun RegistrationScreen() {
+fun RegistrationScreen(userViewModel: UserViewModel, onLoginNav: ()->Unit)
+    {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var firstName by remember { mutableStateOf("") }
@@ -43,6 +44,15 @@ fun RegistrationScreen() {
     var emailError by remember { mutableStateOf("") }
     val scrollState = rememberScrollState()
     val context = LocalContext.current
+
+        val registrationSuccess by userViewModel.registrationSuccess.collectAsState()
+
+        LaunchedEffect(registrationSuccess) {
+            if (registrationSuccess == true) {
+                Toast.makeText(context, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                onLoginNav()
+            }
+        }
     Box(
         modifier = Modifier.fillMaxSize().background(
             brush = Brush.verticalGradient(
@@ -93,8 +103,18 @@ fun RegistrationScreen() {
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    Toast.makeText(context, "Registration Successful!", Toast.LENGTH_SHORT).show()
-                },
+                    if (email.isNotBlank() && password.isNotBlank() && firstName.isNotBlank() && lastName.isNotBlank() && phoneNumber.isNotBlank() && emailError.isEmpty()) {
+                        userViewModel.register(
+                            email = email,
+                            password = password,
+                            firstName = firstName,
+                            lastName = lastName,
+                            phoneNumber = phoneNumber,
+                            totalScore = 0
+                        )
+                    } else {
+                        Toast.makeText(context, "Please fill all fields correctly!", Toast.LENGTH_SHORT).show()
+                    }                },
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)

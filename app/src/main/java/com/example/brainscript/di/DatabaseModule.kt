@@ -20,10 +20,10 @@ object DatabaseModule {
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
-            context,
+            context.applicationContext,
             AppDatabase::class.java,
-            "brain_script.db"
-        ).fallbackToDestructiveMigration().build()
+            "brain_script.db",
+        ).fallbackToDestructiveMigration(true).build()
     }
 
     @Provides

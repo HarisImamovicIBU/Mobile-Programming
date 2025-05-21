@@ -24,6 +24,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,11 +39,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.brainscript.R
+import com.example.brainscript.model.User
+import com.example.brainscript.vmodels.UserViewModel
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(userViewModel: UserViewModel, onRegisterNav: ()->Unit, onSuccessLogin: (User)->Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val loginStatus by userViewModel.loginStatus.collectAsState()
+    val loggedUser by userViewModel.loggedUser.collectAsState()
+    LaunchedEffect(loginStatus) {
+        loginStatus?.let{
+            success->
+            if(success){
+                onSuccessLogin(loggedUser!!)
+            }
+            else{
+
+            }
+        }
+    }
 
     Box(
         modifier = Modifier.fillMaxSize().background(
@@ -112,7 +129,7 @@ fun LoginScreen() {
 
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = {},
+                onClick = {userViewModel.login(email, password)},
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow
@@ -129,7 +146,7 @@ fun LoginScreen() {
                 HorizontalDivider(modifier = Modifier.weight(1f), color = Color.Yellow)
             }
             Button(
-                onClick = {},
+                onClick = {onRegisterNav()},
                 modifier = Modifier.fillMaxWidth().
                 border(width = 2.dp, color = Color.Yellow, shape = RoundedCornerShape(10.dp)),
                 shape = RoundedCornerShape(10.dp),

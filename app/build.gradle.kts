@@ -2,8 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization") version "2.0.21"
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    kotlin("kapt")
 }
 
 android {
@@ -42,37 +44,45 @@ android {
 }
 
 dependencies {
-    val room_version = "2.7.1"
+    dependencies {
+        val room_version = "2.7.1"
+        val nav_version = "2.9.0"
 
-    implementation("androidx.room:room-runtime:$room_version")
+        implementation("androidx.navigation:navigation-compose:$nav_version")
+        implementation("androidx.room:room-runtime:$room_version")
+        implementation("androidx.navigation:navigation-ui:$nav_version")
 
-    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
-    // See Add the KSP plugin to your project
-    ksp("androidx.room:room-compiler:$room_version")
+        implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+        androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
-    // If this project only uses Java source, use the Java annotationProcessor
-    // No additional plugins are necessary
-    annotationProcessor("androidx.room:room-compiler:$room_version")
+        implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+        ksp("androidx.room:room-compiler:$room_version")  // keep this for Room KSP
 
-    // optional - Kotlin Extensions and Coroutines support for Room
-    implementation("androidx.room:room-ktx:$room_version")
-    implementation("com.google.dagger:hilt-android:2.56.1")
-    annotationProcessor("com.google.dagger:hilt-android-compiler:2.56.1")
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+        // Remove this line: annotationProcessor("androidx.room:room-compiler:$room_version")
+        // instead use KSP above
+
+        implementation("androidx.room:room-ktx:$room_version")
+
+        implementation("com.google.dagger:hilt-android:2.56.1")
+        implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+        kapt("com.google.dagger:hilt-android-compiler:2.56.1")  // <-- kapt for Hilt
+
+        implementation(libs.androidx.core.ktx)
+        implementation(libs.androidx.lifecycle.runtime.ktx)
+        implementation(libs.androidx.activity.compose)
+        implementation(platform(libs.androidx.compose.bom))
+        implementation(libs.androidx.ui)
+        implementation(libs.androidx.ui.graphics)
+        implementation(libs.androidx.ui.tooling.preview)
+        implementation(libs.androidx.material3)
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.junit)
+        androidTestImplementation(libs.androidx.espresso.core)
+        androidTestImplementation(platform(libs.androidx.compose.bom))
+        androidTestImplementation(libs.androidx.ui.test.junit4)
+        debugImplementation(libs.androidx.ui.tooling)
+        debugImplementation(libs.androidx.ui.test.manifest)
+    }
+
 }
-
-private fun DependencyHandlerScope.ksp(string: String) {}
