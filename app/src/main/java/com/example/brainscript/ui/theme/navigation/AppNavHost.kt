@@ -20,6 +20,7 @@ import com.example.brainscript.ui.theme.HomeScreen
 import com.example.brainscript.ui.theme.LoginScreen
 import com.example.brainscript.ui.theme.RegistrationScreen
 import com.example.brainscript.ui.theme.CategoryScreen
+import com.example.brainscript.ui.theme.ProfileScreen
 import com.example.brainscript.ui.theme.navigation.BottomNavigationBar
 import com.example.brainscript.vmodels.UserViewModel
 import com.example.brainscript.vmodels.CategoryViewModel
@@ -41,6 +42,7 @@ import kotlin.reflect.typeOf
 
 @Serializable data class Home(val user: User)
 @Serializable data class Category(val user: User)
+@Serializable data class Profile(val user: User)
 
 @Composable
 fun AppNavHost() {
@@ -50,7 +52,8 @@ fun AppNavHost() {
 
     val showBottomBar = (currentRoute?.split('/')?.get(0)) in listOf(
         Home::class.qualifiedName,
-        Category::class.qualifiedName
+        Category::class.qualifiedName,
+        Profile::class.qualifiedName
     )
 
     Scaffold(
@@ -63,7 +66,10 @@ fun AppNavHost() {
                     onHomeNav = { navController.navigate(Home(user)) {
                         popUpTo(Main) { saveState = true }
                         launchSingleTop = true
-                    } }
+                    } },
+                    onProfileNav = {
+                        navController.navigate(Profile(it))
+                    }
                 )
             }
         }
@@ -111,6 +117,18 @@ fun AppNavHost() {
                     val loggedUser = backStackEntry.toRoute<Category>().user
                     CategoryScreen(loggedUser, categoryViewModel)
                 }
+
+                composable<Profile>(
+                    typeMap = mapOf(
+                        typeOf<User>() to CustomNavType.UserType
+                    )
+                ) { backStackEntry ->
+                    val userViewModel: UserViewModel = hiltViewModel(backStackEntry)
+                    val loggedUser = backStackEntry.toRoute<Profile>().user
+                    ProfileScreen(loggedUser = loggedUser, userViewModel = userViewModel)
+                }
+
+
             }
         }
     }

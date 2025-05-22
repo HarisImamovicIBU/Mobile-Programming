@@ -1,5 +1,6 @@
 package com.example.brainscript.ui.theme.navigation
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
@@ -16,7 +17,7 @@ import com.example.brainscript.model.User
 import kotlin.math.log
 
 @Composable
-fun BottomNavigationBar(loggedUser: User, onCategoryNav: (User) -> Unit, onHomeNav: (User) -> Unit) {
+fun BottomNavigationBar(loggedUser: User, onCategoryNav: (User) -> Unit, onHomeNav: (User) -> Unit, onProfileNav: (User)->Unit) {
     var selectedItem by remember { mutableStateOf("Home") }
     NavigationBar(containerColor = Color.White) {
         NavigationBarItem(
@@ -31,7 +32,7 @@ fun BottomNavigationBar(loggedUser: User, onCategoryNav: (User) -> Unit, onHomeN
             }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Filled.Person, contentDescription = "Categories", tint = Color.Black) },
+            icon = { Icon(Icons.Filled.List, contentDescription = "Categories", tint = Color.Black) },
             label = { Text("Categories", color = Color.Black) },
             selected = selectedItem == "Categories",
             onClick = {
@@ -41,15 +42,16 @@ fun BottomNavigationBar(loggedUser: User, onCategoryNav: (User) -> Unit, onHomeN
                 }
             }
         )
-        /*NavigationBarItem(
+        NavigationBarItem(
             icon = { Icon(Icons.Filled.Person, contentDescription = "Profile", tint = Color.Black) },
             selected = selectedItem == "Profile",
             label = { Text("Profile", color = Color.Black) },
             onClick = {
                 if (selectedItem != "Profile") {
                     selectedItem = "Profile"
+                    onProfileNav(loggedUser)
                 }
             }
-        )*/
+        )
     }
 }

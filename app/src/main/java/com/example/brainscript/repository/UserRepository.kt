@@ -7,4 +7,5 @@ interface UserRepository : BaseRepository<User> {
     suspend fun getUserByFirstname(firstName: String) : User?
     suspend fun getUserByLastname(lastName: String) : User?
     suspend fun getAllUsers(): List<User>
+    suspend fun getUserById(id: Int): User?
 }
