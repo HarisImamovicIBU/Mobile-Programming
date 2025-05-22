@@ -23,9 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BrainScriptTheme {
                 AppNavHost()
-                //RegistrationScreen()
-                //LoginScreen()
-                //HomeScreen(viewModel)
+
             }
         }
     }

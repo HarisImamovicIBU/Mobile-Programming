@@ -14,4 +14,8 @@ class UserRepositoryImpl(private val dao: UserDao) : UserRepository {
     override suspend fun getUserByEmailAndPassword(email: String, password: String): User? {
         return dao.getUserByEmailAndPassword(email, password)
     }
+
+    override suspend fun getUserById(id: Int): User? {
+        return dao.getUserById(id)
+    }
 }

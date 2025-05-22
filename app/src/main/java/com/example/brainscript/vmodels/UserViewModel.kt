@@ -59,6 +59,15 @@ class UserViewModel @Inject constructor(
         _users.value = repository.getAllUsers()
     }
 
+    fun loadUserById(userId: Int) = viewModelScope.launch {
+        try {
+            val user = repository.getUserById(userId)
+            _loggedUser.value = user
+        } catch (e: Exception) {
+            _error.value = "Failed to load user: ${e.message}"
+        }
+    }
+
     fun insert(user: User) = viewModelScope.launch {
         repository.insert(user)
         loadAllUsers()
