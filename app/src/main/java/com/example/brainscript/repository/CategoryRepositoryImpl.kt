@@ -9,4 +9,8 @@ class CategoryRepositoryImpl(private val dao: CategoryDao) : CategoryRepository 
 
     override suspend fun getAllCategories(): List<Category> = dao.getAllCategories()
     override suspend fun getCategoryByName(categoryName: String): Category? = dao.getCategoryByName(categoryName)
+    override suspend fun getCategoryNameById(id: Int): String? {
+        return dao.getCategoryNameById(id)
+    }
+
 }

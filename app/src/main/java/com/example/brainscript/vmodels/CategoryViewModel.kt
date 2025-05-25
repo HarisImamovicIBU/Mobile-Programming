@@ -19,6 +19,10 @@ class CategoryViewModel @Inject constructor(
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories: StateFlow<List<Category>> = _categories
 
+    private val _categoryName = MutableLiveData<String>()
+    val categoryName: LiveData<String> = _categoryName
+
+
     fun loadCategories(name: String){
         viewModelScope.launch{
             val list = repository.getCategoryByName(name)
@@ -46,4 +50,9 @@ class CategoryViewModel @Inject constructor(
     suspend fun getCategoryByName(name: String): Category? {
         return repository.getCategoryByName(name)
     }
+
+    fun loadCategoryNameById(id: Int) = viewModelScope.launch {
+        _categoryName.value = repository.getCategoryNameById(id) ?: "Unknown"
+    }
+
 }
