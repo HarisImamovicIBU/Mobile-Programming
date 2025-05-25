@@ -18,5 +18,9 @@ data class Question(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val text: String,
     val correctAnswer: String,
-    val categoryId: Int
+    val categoryId: Int,
+    val optionA: String,
+    val optionB: String,
+    val optionC: String,
+    val optionD: String
 )

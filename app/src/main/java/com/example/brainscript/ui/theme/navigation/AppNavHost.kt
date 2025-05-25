@@ -21,6 +21,7 @@ import com.example.brainscript.ui.theme.LoginScreen
 import com.example.brainscript.ui.theme.RegistrationScreen
 import com.example.brainscript.ui.theme.CategoryScreen
 import com.example.brainscript.ui.theme.ProfileScreen
+import com.example.brainscript.ui.theme.QuizScreen
 import com.example.brainscript.ui.theme.navigation.BottomNavigationBar
 import com.example.brainscript.vmodels.UserViewModel
 import com.example.brainscript.vmodels.CategoryViewModel
@@ -43,6 +44,8 @@ import kotlin.reflect.typeOf
 @Serializable data class Home(val user: User)
 @Serializable data class Category(val user: User)
 @Serializable data class Profile(val user: User)
+@Serializable data class Quiz(val categoryId: Int)
+
 
 @Composable
 fun AppNavHost() {
@@ -115,7 +118,7 @@ fun AppNavHost() {
                 ) { backStackEntry ->
                     val categoryViewModel: CategoryViewModel = hiltViewModel(backStackEntry)
                     val loggedUser = backStackEntry.toRoute<Category>().user
-                    CategoryScreen(loggedUser, categoryViewModel)
+                    CategoryScreen(loggedUser, categoryViewModel, navController)
                 }
 
                 composable<Profile>(
@@ -128,7 +131,10 @@ fun AppNavHost() {
                     ProfileScreen(loggedUser = loggedUser, userViewModel = userViewModel)
                 }
 
-
+                composable<Quiz> { backStackEntry ->
+                    val categoryId = backStackEntry.toRoute<Quiz>().categoryId
+                    QuizScreen(categoryId = categoryId)
+                }
             }
         }
     }

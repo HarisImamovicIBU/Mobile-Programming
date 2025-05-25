@@ -62,7 +62,7 @@ dependencies {
         // instead use KSP above
 
         implementation("androidx.room:room-ktx:$room_version")
-
+        implementation("androidx.compose.runtime:runtime-livedata:1.8.2")
         implementation("com.google.dagger:hilt-android:2.56.1")
         implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
