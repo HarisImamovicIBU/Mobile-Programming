@@ -20,6 +20,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -36,6 +38,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.brainscript.R
@@ -48,14 +53,19 @@ fun LoginScreen(userViewModel: UserViewModel, onRegisterNav: ()->Unit, onSuccess
     var password by remember { mutableStateOf("") }
     val loginStatus by userViewModel.loginStatus.collectAsState()
     val loggedUser by userViewModel.loggedUser.collectAsState()
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    val darkBlue = Color(0xFF0D1B2A)
+    val mediumBlue = Color(0xFF1B263B)
+    val lightBlue = Color(0xFFB3CDE0)
+
     LaunchedEffect(loginStatus) {
         loginStatus?.let{
-            success->
+                success->
             if(success){
                 onSuccessLogin(loggedUser!!)
             }
             else{
-
             }
         }
     }
@@ -78,81 +88,90 @@ fun LoginScreen(userViewModel: UserViewModel, onRegisterNav: ()->Unit, onSuccess
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(all = 30.dp).padding(bottom = 200.dp),
+                .padding(all = 33.dp).padding(bottom = 270.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Welcome to BrainScript",
-                color = Color.Yellow,
-                fontSize = 30.sp,
-                modifier = Modifier.padding(bottom = 20.dp )
+                color = lightBlue,
+                fontSize = 38.sp,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(bottom = 25.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email", color = Color.Yellow) },
-                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = Color.Yellow) } ,
+                label = { Text("Email", color = lightBlue, style = MaterialTheme.typography.bodyLarge) },
+                leadingIcon = { Icon(Icons.Default.Email, contentDescription = null, tint = lightBlue) } ,
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
-                    focusedTextColor = Color.Yellow,
-                    focusedIndicatorColor = Color.Yellow
+                    focusedTextColor = lightBlue,
+                    focusedIndicatorColor = lightBlue
                 )
             )
             OutlinedTextField(
                 value = password,
-                onValueChange = { password = it},
-                label = { Text("Password", color = Color.Yellow) },
-                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = Color.Yellow) },
+                onValueChange = { password = it },
+                label = { Text("Password", color = lightBlue, style = MaterialTheme.typography.bodyLarge) },
+                leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null, tint = lightBlue) },
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Filled.Lock else Icons.Filled.Lock,
+                            contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                            tint = lightBlue
+                        )
+                    }
+                },
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = Color.Transparent,
                     focusedContainerColor = Color.Transparent,
-                    focusedTextColor = Color.Yellow,
-                    focusedIndicatorColor = Color.Yellow
+                    focusedTextColor = lightBlue,
+                    unfocusedTextColor = lightBlue,
+                    focusedIndicatorColor = lightBlue
                 )
             )
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "Already have an account?",
-                    color = Color.Yellow,
-                    modifier = Modifier.clickable { println("Test!") }
-                )
-            }
+            ){}
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(30.dp))
+
             Button(
                 onClick = {userViewModel.login(email, password)},
                 modifier = Modifier.fillMaxWidth().height(50.dp),
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow
+                shape = RoundedCornerShape(13.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = lightBlue
                 )
             ) {
-                Text(text = "Log In", color = Color(0xFF1B263B), fontSize = 20.sp)
+                Text(text = "Log In", color = darkBlue, fontSize = 21.sp, style = MaterialTheme.typography.bodyLarge)
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                HorizontalDivider(modifier = Modifier.weight(1f), color = Color.Yellow)
-                Text(text = "or", color = Color.Yellow, modifier = Modifier.padding(8.dp))
-                HorizontalDivider(modifier = Modifier.weight(1f), color = Color.Yellow)
+                HorizontalDivider(modifier = Modifier.weight(4f), color = darkBlue)
+                Text(text = "or", color = lightBlue, modifier = Modifier.padding(10.dp), style = MaterialTheme.typography.titleLarge, fontSize = 18.sp)
+                HorizontalDivider(modifier = Modifier.weight(4f), color = darkBlue)
             }
             Button(
                 onClick = {onRegisterNav()},
                 modifier = Modifier.fillMaxWidth().
-                border(width = 2.dp, color = Color.Yellow, shape = RoundedCornerShape(10.dp)),
+                border(width = 2.dp, color = lightBlue, shape = RoundedCornerShape(13.dp)),
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
             ) {
-                Text(text = "Register", color = Color.Yellow, fontSize = 20.sp)
+                Text(text = "Register", color = lightBlue, fontSize = 21.sp, style = MaterialTheme.typography.bodyLarge)
             }
         }
     }
