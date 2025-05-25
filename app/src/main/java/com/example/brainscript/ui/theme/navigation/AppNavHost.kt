@@ -108,7 +108,18 @@ fun AppNavHost() {
                 ) { backStackEntry ->
                     val homeViewModel: HomeVModel = hiltViewModel(backStackEntry)
                     val loggedUser = backStackEntry.toRoute<Home>().user
-                    HomeScreen(loggedUser = loggedUser, homeViewModel)
+                    HomeScreen(
+                        loggedUser = loggedUser,
+                        onStartQuiz = { navController.navigate(Quiz(categoryId = 1)) }, // ili koristi stvarni categoryId
+                        onViewQuestions = { /* TODO: implementacija ako imaš questions screen */ },
+                        onProfile = { navController.navigate(Profile(loggedUser)) },
+                        onLogout = {
+                            navController.navigate(route = Login) {
+                                popUpTo(Main) { inclusive = true }
+                            }
+                        }
+                    )
+
                 }
 
                 composable<Category>(
