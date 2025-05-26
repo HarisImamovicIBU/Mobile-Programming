@@ -102,7 +102,7 @@ fun CategoryScreen(
                                     shape = RoundedCornerShape(20.dp),
                                     elevation = CardDefaults.cardElevation(25.dp),
                                     onClick = {
-                                        navController.navigate(Quiz(category.id))
+                                        navController.navigate(Quiz(categoryId = category.id, user = loggedUser))
                                     }
                                 ) {
                                     Box(

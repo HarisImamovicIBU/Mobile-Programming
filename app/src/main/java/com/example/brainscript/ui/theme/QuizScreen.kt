@@ -30,11 +30,14 @@ import com.example.brainscript.vmodels.QuestionViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
 import com.example.brainscript.R
+import com.example.brainscript.ui.theme.navigation.ResultRoute
 import com.example.brainscript.vmodels.CategoryViewModel
+import com.example.brainscript.model.User
 
 @Composable
-fun QuizScreen(categoryId: Int, viewModel: QuestionViewModel = hiltViewModel()) {
+fun QuizScreen(categoryId: Int, user: User, navController: NavController, viewModel: QuestionViewModel = hiltViewModel()) {
     val questions by viewModel.questions.observeAsState(emptyList())
     var currentIndex by remember { mutableStateOf(0) }
     var selectedAnswer by remember { mutableStateOf<String?>(null) }
@@ -147,7 +150,13 @@ fun QuizScreen(categoryId: Int, viewModel: QuestionViewModel = hiltViewModel()) 
                             currentIndex++
                             selectedAnswer = null
                         } else {
-                            showScore = true
+                            navController.navigate(
+                                ResultRoute(
+                                    score = score,
+                                    total = questions.size,
+                                    user = user
+                                )
+                            )
                         }
                     },
                     enabled = selectedAnswer != null,

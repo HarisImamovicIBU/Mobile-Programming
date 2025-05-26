@@ -22,6 +22,7 @@ import com.example.brainscript.ui.theme.RegistrationScreen
 import com.example.brainscript.ui.theme.CategoryScreen
 import com.example.brainscript.ui.theme.ProfileScreen
 import com.example.brainscript.ui.theme.QuizScreen
+import com.example.brainscript.ui.theme.ResultsScreen
 import com.example.brainscript.ui.theme.navigation.BottomNavigationBar
 import com.example.brainscript.vmodels.UserViewModel
 import com.example.brainscript.vmodels.CategoryViewModel
@@ -44,7 +45,9 @@ import kotlin.reflect.typeOf
 @Serializable data class Home(val user: User)
 @Serializable data class Category(val user: User)
 @Serializable data class Profile(val user: User)
-@Serializable data class Quiz(val categoryId: Int)
+@Serializable data class Quiz(val categoryId: Int, val user: User)
+@Serializable data class ResultRoute(val score: Int, val total: Int, val user: User)
+
 
 
 @Composable
@@ -110,7 +113,7 @@ fun AppNavHost() {
                     val loggedUser = backStackEntry.toRoute<Home>().user
                     HomeScreen(
                         loggedUser = loggedUser,
-                        onStartQuiz = { navController.navigate(Quiz(categoryId = 1)) }, // ili koristi stvarni categoryId
+                        onStartQuiz = { navController.navigate(Quiz(categoryId = 1, user = loggedUser)) },
                         onViewQuestions = { /* TODO: implementacija ako imaš questions screen */ },
                         onProfile = { navController.navigate(Profile(loggedUser)) },
                         onLogout = {
@@ -142,9 +145,33 @@ fun AppNavHost() {
                     ProfileScreen(loggedUser = loggedUser, userViewModel = userViewModel)
                 }
 
-                composable<Quiz> { backStackEntry ->
+                composable<Quiz>(
+                    typeMap = mapOf(
+                        typeOf<User>() to CustomNavType.UserType
+                    )
+                ) { backStackEntry ->
                     val categoryId = backStackEntry.toRoute<Quiz>().categoryId
-                    QuizScreen(categoryId = categoryId)
+                    val user = navBackStackEntry!!.toRoute<Home>().user
+                    QuizScreen(categoryId = categoryId, user = user, navController = navController)
+                }
+
+                composable<ResultRoute>(
+                    typeMap = mapOf(
+                        typeOf<User>() to CustomNavType.UserType
+                    )
+                ) { backStackEntry ->
+                    val args = backStackEntry.toRoute<ResultRoute>()
+                    ResultsScreen(
+                        score = args.score,
+                        totalQuestions = args.total,
+                        userName = args.user.firstName,
+                        onTryAgain = {
+                            navController.popBackStack()
+                        },
+                        onBackToCategories = {
+                            navController.navigate(Category(args.user))
+                        }
+                    )
                 }
             }
         }
