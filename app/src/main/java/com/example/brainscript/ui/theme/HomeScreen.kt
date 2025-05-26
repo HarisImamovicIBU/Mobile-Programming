@@ -53,7 +53,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 30.dp, vertical = 40.dp),
+                .padding(horizontal = 30.dp, vertical = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -61,8 +61,8 @@ fun HomeScreen(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "App Logo",
                 modifier = Modifier
-                    .height(100.dp)
-                    .padding(bottom = 20.dp),
+                    .size(180.dp)
+                    .padding(top = 15.dp, bottom = 30.dp),
                 contentScale = ContentScale.Fit
             )
 
@@ -84,7 +84,7 @@ fun HomeScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = lightBlue),
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Text("Start Quiz", color = darkBlue, fontSize = 20.sp)
+                Text("Start Quiz", color = darkBlue, fontSize = 20.sp, style = MaterialTheme.typography.bodyLarge)
             }
 
             Button(
@@ -96,7 +96,7 @@ fun HomeScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = lightBlue),
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Text("View Questions", color = darkBlue, fontSize = 20.sp)
+                Text("View Questions", color = darkBlue, fontSize = 20.sp, style = MaterialTheme.typography.bodyLarge)
             }
 
             Button(
@@ -108,7 +108,7 @@ fun HomeScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = lightBlue),
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Text("Profile", color = darkBlue, fontSize = 20.sp)
+                Text("Profile", color = darkBlue, fontSize = 20.sp, style = MaterialTheme.typography.bodyLarge)
             }
 
             Button(
@@ -127,7 +127,7 @@ fun HomeScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = lightBlue),
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Text("Contact Us", color = darkBlue, fontSize = 20.sp)
+                Text("Contact Us", color = darkBlue, fontSize = 20.sp, style = MaterialTheme.typography.bodyLarge)
             }
 
             Spacer(modifier = Modifier.height(25.dp))
@@ -141,7 +141,7 @@ fun HomeScreen(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 shape = RoundedCornerShape(10.dp)
             ) {
-                Text("Logout", color = lightBlue, fontSize = 20.sp)
+                Text("Logout", color = lightBlue, fontSize = 20.sp, style = MaterialTheme.typography.bodyLarge)
             }
         }
     }
