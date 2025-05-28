@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +23,7 @@ import androidx.compose.ui.unit.sp
 fun ResultsScreen(score: Int, totalQuestions: Int, userName: String, onTryAgain: () -> Unit, onBackToCategories: () -> Unit) {
     val darkBlue = Color(0xFF0D1B2A)
     val lightBlue = Color(0xFF778DA9)
+    val mediumBlue = Color(0xFF1B263B)
 
     val message = when {
         score == totalQuestions -> "Perfect!"
@@ -40,31 +43,43 @@ fun ResultsScreen(score: Int, totalQuestions: Int, userName: String, onTryAgain:
             Text(
                 text = "Quiz completed, $userName!",
                 color = lightBlue,
-                fontSize = 26.sp,
+                fontSize = 30.sp,
                 style = MaterialTheme.typography.titleLarge
             )
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(30.dp))
             Text(
                 text = message,
-                color = Color.White,
-                fontSize = 18.sp,
+                color = lightBlue,
+                fontSize = 21.sp,
                 style = MaterialTheme.typography.bodyLarge
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(18.dp))
             Text(
                 text = "You scored $score out of $totalQuestions",
-                color = Color.White,
-                fontSize = 18.sp,
+                color = lightBlue,
+                fontSize = 21.sp,
                 style = MaterialTheme.typography.bodyLarge
             )
             Spacer(modifier = Modifier.height(35.dp))
-            Button(onClick = onTryAgain) {
-                Text("Try Again")
+            Button(
+                onClick = onTryAgain,
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(55.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = lightBlue)
+            ) {
+                Text("Try Again", fontSize = 17.sp, color = darkBlue, style = MaterialTheme.typography.titleLarge)
             }
             Spacer(modifier = Modifier.height(15.dp))
-            Button(onClick = onBackToCategories) {
-                Text("Back to Categories")
+            Button(
+                onClick = onBackToCategories,
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+                    .height(54.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = lightBlue)
+            ) {
+                Text("Back to Categories", fontSize = 17.sp, color = darkBlue, style = MaterialTheme.typography.titleLarge)
             }
         }
-    }
+        }
 }
