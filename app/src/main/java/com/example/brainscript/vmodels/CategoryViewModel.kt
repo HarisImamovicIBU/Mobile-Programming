@@ -54,5 +54,4 @@ class CategoryViewModel @Inject constructor(
     fun loadCategoryNameById(id: Int) = viewModelScope.launch {
         _categoryName.value = repository.getCategoryNameById(id) ?: "Unknown"
     }
-
 }

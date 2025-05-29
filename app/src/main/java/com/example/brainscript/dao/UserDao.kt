@@ -1,11 +1,23 @@
 package com.example.brainscript.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.brainscript.model.User
 
 @Dao
 interface UserDao : BaseDao<User> {
+    @Insert
+    override suspend fun insert(entity: User)
+
+    @Update
+    override suspend fun update(entity: User)
+
+    @Delete
+    override suspend fun delete(entity: User)
+
     @Query("SELECT * FROM users")
     suspend fun getAllUsers(): List<User>
 

@@ -19,7 +19,6 @@ class CategoryPlanner: Application() {
         super.onCreate()
 
         CoroutineScope(Dispatchers.IO).launch {
-            //Test you can run here
             database.userDao().getUserById(1)
             Log.d("DatabaseTest", "Database initialized")
         }

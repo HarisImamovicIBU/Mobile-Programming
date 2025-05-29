@@ -94,4 +94,14 @@ class UserViewModel @Inject constructor(
     suspend fun getUserByLastname(lastName: String): User? {
         return repository.getUserByLastname(lastName)
     }
+
+    fun updateScore(userId: Int, score: Int) = viewModelScope.launch {
+        try {
+            repository.updateScore(userId, score)
+            loadUserById(userId)
+        } catch (e: Exception) {
+            _error.value = "Failed to update score: ${e.message}"
+        }
+    }
+
 }

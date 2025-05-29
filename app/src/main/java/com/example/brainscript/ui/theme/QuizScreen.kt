@@ -1,21 +1,12 @@
-package com.example.brainscript.ui.theme
+package com.example.brainscript.ui.screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -25,22 +16,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.brainscript.model.Question
-import com.example.brainscript.vmodels.QuestionViewModel
-import androidx.compose.foundation.Image
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
 import com.example.brainscript.R
+import com.example.brainscript.model.Answer
+import com.example.brainscript.model.User
+import com.example.brainscript.ui.theme.navigation.ResultRoute
+import com.example.brainscript.vmodels.AnswerViewModel
 import com.example.brainscript.vmodels.CategoryViewModel
+import com.example.brainscript.vmodels.QuestionViewModel
 
 @Composable
-fun QuizScreen(categoryId: Int, viewModel: QuestionViewModel = hiltViewModel()) {
+fun QuizScreen(
+    categoryId: Int,
+    user: User,
+    navController: NavController,
+    viewModel: QuestionViewModel = hiltViewModel()
+) {
     val questions by viewModel.questions.observeAsState(emptyList())
+    val categoryViewModel: CategoryViewModel = hiltViewModel()
+    val answerViewModel: AnswerViewModel = hiltViewModel()
+
     var currentIndex by remember { mutableStateOf(0) }
     var selectedAnswer by remember { mutableStateOf<String?>(null) }
     var score by remember { mutableStateOf(0) }
-    var showScore by remember { mutableStateOf(false) }
-    val categoryViewModel: CategoryViewModel = hiltViewModel()
 
     LaunchedEffect(categoryId) {
         viewModel.loadQuestionsByCategory(categoryId)
@@ -71,8 +69,7 @@ fun QuizScreen(categoryId: Int, viewModel: QuestionViewModel = hiltViewModel()) 
                 Image(
                     painter = painterResource(id = R.drawable.logo),
                     contentDescription = "Logo",
-                    modifier = Modifier
-                        .size(185.dp)
+                    modifier = Modifier.size(185.dp)
                 )
 
                 Spacer(modifier = Modifier.height(22.dp))
@@ -83,8 +80,8 @@ fun QuizScreen(categoryId: Int, viewModel: QuestionViewModel = hiltViewModel()) 
                     fontSize = 33.sp,
                     fontWeight = FontWeight.Bold
                 )
-                Spacer(modifier = Modifier.height(13.dp))
 
+                Spacer(modifier = Modifier.height(13.dp))
                 Text(
                     text = "Question ${currentIndex + 1} of ${questions.size}",
                     style = MaterialTheme.typography.bodyLarge,
@@ -93,7 +90,6 @@ fun QuizScreen(categoryId: Int, viewModel: QuestionViewModel = hiltViewModel()) 
                 )
 
                 Spacer(modifier = Modifier.height(13.dp))
-
                 Text(
                     text = "Category: $categoryName",
                     color = Color.White,
@@ -133,21 +129,38 @@ fun QuizScreen(categoryId: Int, viewModel: QuestionViewModel = hiltViewModel()) 
                                     .fillMaxWidth()
                                     .padding(vertical = 5.dp)
                             ) {
-                                Text(option ?: "", fontFamily = poppinsFont, fontSize = 15.sp)
+                                Text(option ?: "", fontSize = 15.sp)
                             }
                         }
                     }
                 }
+
                 Button(
                     onClick = {
+                        answerViewModel.insertAnswer(
+                            Answer(
+                                userId = user.id,
+                                questionId = question.id,
+                                givenAnswer = selectedAnswer ?: "",
+                                isCorrect = selectedAnswer == question.correctAnswer
+                            )
+                        )
+
                         if (selectedAnswer == question.correctAnswer) {
                             score++
                         }
+
                         if (currentIndex < questions.lastIndex) {
                             currentIndex++
                             selectedAnswer = null
                         } else {
-                            showScore = true
+                            navController.navigate(
+                                ResultRoute(
+                                    score = score,
+                                    total = questions.size,
+                                    user = user
+                                )
+                            )
                         }
                     },
                     enabled = selectedAnswer != null,
@@ -162,39 +175,10 @@ fun QuizScreen(categoryId: Int, viewModel: QuestionViewModel = hiltViewModel()) 
                         .height(45.dp)
                 ) {
                     Text(
-                        text = "Next",
+                        text = if (currentIndex == questions.lastIndex) "Finish" else "Next",
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = orbitronFont
-                    )
-                }
-            }
-        } else if (showScore) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = "Quiz Results",
-                        color = Color.White,
-                        fontSize = 22.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "You scored: $score out of ${questions.size}",
-                        color = lightBlue,
-                        fontSize = 18.sp
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Button(
-                        onClick = { /* TODO: navigate back or home */ },
-                        colors = ButtonDefaults.buttonColors(containerColor = lightBlue),
-                        shape = RoundedCornerShape(12.dp)
-                    ) {
-                        Text("DONE", color = Color.White)
-                    }
                 }
             }
         } else {
