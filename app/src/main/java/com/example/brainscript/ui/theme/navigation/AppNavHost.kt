@@ -114,7 +114,6 @@ fun AppNavHost() {
                     HomeScreen(
                         loggedUser = loggedUser,
                         onStartQuiz = { navController.navigate(Quiz(categoryId = 1, user = loggedUser)) },
-                        onViewQuestions = { },
                         onProfile = { navController.navigate(Profile(loggedUser)) },
                         onLogout = {
                             navController.navigate(route = Login) {
