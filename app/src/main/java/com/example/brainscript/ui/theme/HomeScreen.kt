@@ -28,7 +28,6 @@ import androidx.compose.ui.layout.ContentScale
 fun HomeScreen(
     loggedUser: User,
     onStartQuiz: () -> Unit,
-    onViewQuestions: () -> Unit,
     onProfile: () -> Unit,
     onLogout: () -> Unit
 ) {
@@ -85,18 +84,6 @@ fun HomeScreen(
                 shape = RoundedCornerShape(10.dp)
             ) {
                 Text("Start Quiz", color = darkBlue, fontSize = 20.sp, style = MaterialTheme.typography.bodyLarge)
-            }
-
-            Button(
-                onClick = onViewQuestions,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp)
-                    .height(55.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = lightBlue),
-                shape = RoundedCornerShape(10.dp)
-            ) {
-                Text("View Questions", color = darkBlue, fontSize = 20.sp, style = MaterialTheme.typography.bodyLarge)
             }
 
             Button(
