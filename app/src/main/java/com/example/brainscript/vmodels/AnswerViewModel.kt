@@ -32,6 +32,10 @@ class AnswerViewModel @Inject constructor(
         repository.delete(answer)
     }
 
+    fun insertAnswer(answer: Answer) = viewModelScope.launch {
+        repository.insert(answer)
+    }
+
     fun loadAnswersForUser(userId: Int) = viewModelScope.launch {
         _userAnswers.value = repository.getAnswersForUser(userId)
     }

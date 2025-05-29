@@ -23,7 +23,6 @@ fun ProfileScreen(loggedUser: User?, userViewModel: UserViewModel) {
         loggedUser?.id?.let { userViewModel.loadUserById(it) }
     }
 
-    // Theme colors
     val darkBlue = Color(0xFF0D1B2A)
     val mediumBlue = Color(0xFF1B263B)
     val lightBlue = Color(0xFFB3CDE0)

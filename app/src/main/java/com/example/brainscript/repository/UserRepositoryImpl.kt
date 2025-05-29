@@ -18,4 +18,6 @@ class UserRepositoryImpl(private val dao: UserDao) : UserRepository {
     override suspend fun getUserById(id: Int): User? {
         return dao.getUserById(id)
     }
+
+    override suspend fun updateScore(id: Int, newScore: Int) = dao.updateTotalScore(id, newScore)
 }

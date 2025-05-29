@@ -13,14 +13,17 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.brainscript.vmodels.UserViewModel
 
 @Composable
-fun ResultsScreen(score: Int, totalQuestions: Int, userName: String, onTryAgain: () -> Unit, onBackToCategories: () -> Unit) {
+fun ResultsScreen(score: Int, totalQuestions: Int, userName: String, userId: Int, onTryAgain: () -> Unit, onBackToCategories: () -> Unit, userViewModel: UserViewModel,) {
+
     val darkBlue = Color(0xFF0D1B2A)
     val lightBlue = Color(0xFF778DA9)
     val mediumBlue = Color(0xFF1B263B)
@@ -30,6 +33,10 @@ fun ResultsScreen(score: Int, totalQuestions: Int, userName: String, onTryAgain:
         score >= totalQuestions * 0.7 -> "Well done!"
         score >= totalQuestions * 0.5 -> "Not bad, keep practicing!"
         else -> "Don't give up! Try again!"
+    }
+
+    LaunchedEffect(Unit) {
+        userViewModel.updateScore(userId, score)
     }
 
     Box(
@@ -81,5 +88,5 @@ fun ResultsScreen(score: Int, totalQuestions: Int, userName: String, onTryAgain:
                 Text("Back to Categories", fontSize = 17.sp, color = darkBlue, style = MaterialTheme.typography.titleLarge)
             }
         }
-        }
+    }
 }
